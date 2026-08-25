@@ -1,0 +1,608 @@
+/* =========================================================
+   JOMION-SPORT — style.css
+   Charte graphique : "billet de match / tableau de score"
+   Thème sombre par défaut, avec bascule vers un thème clair
+   (attribut data-theme="light" posé sur <html> par script.js).
+   ========================================================= */
+
+/* ---------- 1. TOKENS (variables) — THÈME SOMBRE (par défaut) ---------- */
+:root{
+  /* Couleurs */
+  --navy-900:#0A0F1E;      /* fond général très sombre */
+  --navy-800:#0F172A;      /* fond header/footer/hero */
+  --blue-600:#2563EB;      /* bleu principal — actions, liens */
+  --blue-400:#38BDF8;      /* cyan/bleu clair — survols, accents, "live" */
+  --white:#FFFFFF;         /* texte/icônes clairs — ne change pas selon le thème */
+  --surface:#1E293B;       /* fond des cartes/formulaires */
+  --gray-50:#0B1220;       /* fond général de page */
+  --gray-100:#26324A;      /* bordures / séparateurs */
+  --gray-500:#94A3B8;      /* texte secondaire */
+  --gray-700:#E2E8F0;      /* texte principal */
+  --green-600:#22C55E;     /* confiance haute */
+  --amber-600:#F59E0B;     /* confiance moyenne */
+  --red-600:#EF4444;       /* confiance faible / live */
+
+  /* Typographie */
+  --font-display:"Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Échelle */
+  --radius-s:6px;
+  --radius-m:12px;
+  --shadow-card:0 2px 10px rgba(0,0,0,0.35);
+  --shadow-card-hover:0 8px 24px rgba(0,0,0,0.5);
+  --max-width:1240px;
+}
+
+/* ---------- 1 bis. TOKENS — THÈME CLAIR (optionnel, activé par l'utilisateur) ---------- */
+:root[data-theme="light"]{
+  --navy-900:#0A1B33;
+  --navy-800:#12274A;
+  --blue-600:#1E5FE0;
+  --blue-400:#4C8DFF;
+  --white:#FFFFFF;
+  --surface:#FFFFFF;
+  --gray-50:#F4F6FA;
+  --gray-100:#E7EBF2;
+  --gray-500:#5B6472;
+  --gray-700:#2C3442;
+  --green-600:#1E9E6B;
+  --amber-600:#C98A00;
+  --red-600:#C7443E;
+  --shadow-card:0 2px 10px rgba(10,27,51,0.08);
+  --shadow-card-hover:0 8px 24px rgba(10,27,51,0.14);
+}
+
+
+/* ---------- 2. RESET ---------- */
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--gray-700);
+  background:var(--gray-50);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:var(--blue-600);text-decoration:none;}
+a:hover{color:var(--blue-400);}
+ul{margin:0;padding:0;list-style:none;}
+h1,h2,h3,h4{
+  font-family:var(--font-display);
+  font-weight:600;
+  letter-spacing:0.01em;
+  line-height:1.1;
+  color:var(--navy-900);
+  margin:0 0 0.5em;
+}
+p{margin:0 0 1em;}
+button{font-family:inherit;cursor:pointer;}
+:focus-visible{outline:3px solid var(--blue-400);outline-offset:2px;}
+.container{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:0 20px;
+}
+.visually-hidden{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;padding:0;margin:-1px;
+}
+.skip-link{
+  position:absolute;left:-999px;top:0;background:var(--blue-600);color:#fff;
+  padding:10px 16px;z-index:200;border-radius:0 0 var(--radius-s) 0;
+}
+.skip-link:focus{left:0;}
+
+/* ---------- 3. BANDEAU TICKER (signature) ---------- */
+.ticker{
+  background:var(--navy-900);
+  color:var(--gray-100);
+  overflow:hidden;
+  white-space:nowrap;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.ticker__track{
+  display:inline-flex;
+  gap:40px;
+  padding:7px 0;
+  font-family:var(--font-display);
+  font-size:0.82rem;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  animation:ticker-scroll 28s linear infinite;
+}
+.ticker__track span{opacity:0.85;}
+.ticker__track span::before{content:"● ";color:var(--blue-400);}
+@keyframes ticker-scroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+@media (prefers-reduced-motion: reduce){
+  .ticker__track{animation:none;overflow-x:auto;}
+}
+
+/* ---------- 4. EN-TÊTE / NAVIGATION ---------- */
+.site-header{
+  background:var(--surface);
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 1px 0 var(--gray-100);
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  max-width:var(--max-width);margin:0 auto;
+}
+.brand{display:flex;align-items:center;gap:10px;color:var(--navy-900);}
+.brand:hover{color:var(--navy-900);}
+.brand__crest{
+  width:38px;height:38px;flex:none;
+  background:linear-gradient(160deg,var(--blue-600),var(--navy-900));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:var(--font-display);font-weight:700;font-size:1.05rem;
+}
+.brand__text{display:flex;flex-direction:column;line-height:1.05;}
+.brand__name{font-family:var(--font-display);font-weight:700;font-size:1.25rem;}
+.brand__tagline{font-size:0.68rem;color:var(--gray-500);letter-spacing:0.03em;}
+
+.nav-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;
+  background:transparent;border:1px solid var(--gray-100);border-radius:var(--radius-s);
+}
+.nav-toggle__bar,.nav-toggle__bar::before,.nav-toggle__bar::after{
+  content:"";display:block;width:20px;height:2px;background:var(--gray-700);
+  position:relative;transition:transform .2s ease, opacity .2s ease;
+}
+.nav-toggle__bar::before{position:absolute;top:-6px;}
+.nav-toggle__bar::after{position:absolute;top:6px;}
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar{background:transparent;}
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar::before{transform:translateY(6px) rotate(45deg);}
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar::after{transform:translateY(-6px) rotate(-45deg);}
+
+.main-nav{
+  position:fixed;inset:0 0 0 auto;
+  width:min(78vw,320px);
+  background:var(--navy-900);
+  padding:90px 24px 24px;
+  transform:translateX(100%);
+  transition:transform .28s ease;
+  z-index:99;
+  overflow-y:auto;
+}
+.main-nav.is-open{transform:translateX(0);}
+.main-nav__list{display:flex;flex-direction:column;gap:4px;}
+.main-nav__list a{
+  display:block;padding:12px 10px;color:var(--gray-100);
+  font-family:var(--font-display);font-size:1.15rem;letter-spacing:0.02em;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.main-nav__list a:hover,.main-nav__list a[aria-current="page"]{color:var(--blue-400);}
+
+.theme-toggle{
+  background:transparent;border:1px solid currentColor;color:inherit;
+  width:34px;height:34px;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:1rem;cursor:pointer;padding:0;opacity:0.85;
+}
+.theme-toggle:hover{opacity:1;}
+.main-nav__list li.theme-toggle-item{
+  display:flex;align-items:center;padding:12px 10px 4px;border-bottom:0;
+}
+
+.nav-backdrop{
+  position:fixed;inset:0;background:rgba(10,27,51,0.5);
+  opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:98;
+}
+.nav-backdrop.is-open{opacity:1;pointer-events:auto;}
+
+/* Desktop nav (≥900px) */
+@media (min-width:900px){
+  .nav-toggle{display:none;}
+  .nav-backdrop{display:none;}
+  .main-nav{
+    position:static;width:auto;background:transparent;padding:0;
+    transform:none;overflow:visible;
+  }
+  .main-nav__list{flex-direction:row;gap:2px;}
+  .main-nav__list a{
+    color:var(--gray-700);border-bottom:2px solid transparent;padding:8px 12px;
+    font-size:0.95rem;
+  }
+  .main-nav__list a:hover,.main-nav__list a[aria-current="page"]{
+    color:var(--blue-600);border-bottom-color:var(--blue-600);
+  }
+  .main-nav__list li.theme-toggle-item{padding:0 0 0 8px;margin-left:4px;}
+}
+
+/* ---------- 5. HERO ---------- */
+.hero{
+  background:radial-gradient(120% 140% at 100% 0%, var(--navy-800) 0%, var(--navy-900) 55%);
+  color:var(--white);
+  padding:56px 0 64px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-10%;bottom:-30%;width:60%;padding-bottom:60%;
+  border:1px solid rgba(255,255,255,0.08);border-radius:50%;
+}
+.hero .container{
+  display:grid;gap:32px;position:relative;z-index:1;
+}
+.hero__eyebrow{
+  font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.14em;
+  font-size:0.78rem;color:var(--blue-400);margin-bottom:10px;
+}
+.hero h1{
+  color:var(--white);font-size:clamp(2.1rem,7vw,3.6rem);
+  max-width:14ch;
+}
+.hero__slogan{
+  font-size:clamp(1.05rem,3vw,1.3rem);color:var(--gray-100);opacity:0.9;
+  max-width:44ch;
+}
+.hero__lead{color:var(--gray-100);opacity:0.75;max-width:56ch;}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 22px;border-radius:var(--radius-s);
+  font-family:var(--font-display);font-size:1.02rem;letter-spacing:0.02em;
+  border:1px solid transparent;transition:transform .15s ease, background .15s ease;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn--primary{background:var(--blue-600);color:#fff;}
+.btn--primary:hover{background:var(--blue-400);color:#fff;}
+.btn--ghost{border-color:rgba(255,255,255,0.35);color:#fff;}
+.btn--ghost:hover{border-color:#fff;color:#fff;}
+.btn--outline{border-color:var(--blue-600);color:var(--blue-600);}
+.btn--outline:hover{background:var(--blue-600);color:#fff;}
+
+/* Ticket panel dans le hero (aperçu de match) */
+.hero__ticket{
+  background:var(--surface);color:var(--gray-700);
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card-hover);
+  max-width:420px;
+}
+
+/* ---------- 6. SECTIONS GÉNÉRALES ---------- */
+.section{padding:56px 0;}
+.section--alt{background:var(--surface);}
+.section__head{
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+  gap:12px;margin-bottom:28px;
+}
+.section__eyebrow{
+  font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.12em;
+  font-size:0.75rem;color:var(--blue-600);
+}
+.section__title{font-size:clamp(1.6rem,4vw,2.2rem);margin:0;}
+.section__desc{color:var(--gray-500);max-width:60ch;}
+.section__link{font-family:var(--font-display);font-size:0.95rem;white-space:nowrap;}
+
+.grid{display:grid;gap:20px;}
+.grid--2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+.grid--3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+.grid--4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+
+/* ---------- 7. CARTE "BILLET DE MATCH" (signature) ---------- */
+.ticket-card{
+  background:var(--surface);
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:box-shadow .2s ease, transform .2s ease;
+}
+.ticket-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-2px);}
+.ticket-card__top{
+  background:var(--navy-900);color:var(--gray-100);
+  padding:12px 16px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-display);font-size:0.82rem;letter-spacing:0.03em;
+}
+.ticket-card__competition{color:var(--blue-400);text-transform:uppercase;}
+.ticket-card__body{padding:18px 16px 8px;}
+.ticket-card__teams{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:var(--font-display);font-size:1.3rem;color:var(--navy-900);
+  margin-bottom:6px;
+}
+.ticket-card__teams .vs{font-size:0.85rem;color:var(--gray-500);}
+.ticket-card__meta{font-size:0.85rem;color:var(--gray-500);margin-bottom:10px;}
+.ticket-card__pick{
+  background:var(--gray-50);border:1px solid var(--gray-100);
+  border-radius:var(--radius-s);padding:10px 12px;font-size:0.92rem;
+  margin-bottom:12px;
+}
+.ticket-card__pick strong{color:var(--navy-900);}
+.ticket-card__analysis{font-size:0.9rem;color:var(--gray-500);margin-bottom:10px;}
+
+/* Perforation façon billet déchirable */
+.ticket-card__perf{
+  position:relative;
+  border-top:2px dashed var(--gray-100);
+  margin:0 16px;
+}
+.ticket-card__perf::before,.ticket-card__perf::after{
+  content:"";position:absolute;top:-9px;width:18px;height:18px;
+  background:var(--gray-50);border-radius:50%;
+}
+.ticket-card__perf::before{left:-25px;}
+.ticket-card__perf::after{right:-25px;}
+
+/* Jauge de confiance en segments (façon tableau de score) */
+.confidence{padding:14px 16px 16px;}
+.confidence__label{
+  display:flex;justify-content:space-between;font-size:0.78rem;
+  text-transform:uppercase;letter-spacing:0.05em;color:var(--gray-500);margin-bottom:6px;
+}
+.confidence__label strong{font-family:var(--font-display);color:var(--navy-900);font-size:0.95rem;text-transform:none;letter-spacing:0;}
+.confidence__bar{display:flex;gap:4px;}
+.confidence__seg{height:8px;flex:1;background:var(--gray-100);border-radius:2px;}
+.confidence__seg.is-filled{background:var(--conf-color,var(--blue-600));}
+.confidence--high{--conf-color:var(--green-600);}
+.confidence--medium{--conf-color:var(--amber-600);}
+.confidence--low{--conf-color:var(--red-600);}
+
+/* Badges sport / statut sur les cartes */
+.ticket-card__badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.sport-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--gray-50);border:1px solid var(--gray-100);
+  color:var(--navy-900);font-size:0.76rem;font-family:var(--font-display);
+  text-transform:uppercase;letter-spacing:0.03em;padding:3px 9px;border-radius:999px;
+}
+.status-badge{
+  display:inline-flex;align-items:center;
+  font-size:0.76rem;font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.03em;
+  padding:3px 9px;border-radius:999px;color:#fff;background:var(--gray-500);
+}
+.status-badge.is-avenir{background:var(--blue-600);}
+.status-badge.is-termine{background:var(--gray-500);}
+.status-badge.is-annule{background:var(--red-600);}
+.status-badge.is-encours{background:var(--red-600);animation:pulse-live 1.6s ease-in-out infinite;}
+@keyframes pulse-live{0%,100%{opacity:1;}50%{opacity:0.55;}}
+.team-logo{width:18px;height:18px;object-fit:contain;vertical-align:middle;margin-right:4px;}
+.competition-logo{width:16px;height:16px;object-fit:contain;vertical-align:middle;margin-right:4px;}
+.classement-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius-m);overflow:hidden;box-shadow:var(--shadow-card);}
+.classement-table th,.classement-table td{padding:10px 12px;text-align:center;font-size:0.88rem;border-bottom:1px solid var(--gray-100);}
+.classement-table th{background:var(--navy-900);color:#fff;font-family:var(--font-display);font-weight:500;text-transform:uppercase;font-size:0.72rem;letter-spacing:0.04em;}
+.classement-table td:nth-child(2){text-align:left;font-family:var(--font-display);color:var(--navy-900);}
+.classement-table tr:last-child td{border-bottom:0;}
+.classement-table td.points{font-family:var(--font-display);font-weight:600;color:var(--blue-600);}
+.classement-wrap{overflow-x:auto;}
+.fiche-match{background:var(--surface);border-radius:var(--radius-m);box-shadow:var(--shadow-card);padding:24px;margin-bottom:24px;}
+.fiche-match__teams{display:flex;align-items:center;justify-content:center;gap:20px;font-family:var(--font-display);font-size:1.6rem;color:var(--navy-900);margin:16px 0;flex-wrap:wrap;text-align:center;}
+.fiche-match__teams img{width:32px;height:32px;object-fit:contain;vertical-align:middle;margin-right:8px;}
+.fiche-match__score{font-size:2.2rem;font-family:var(--font-display);color:var(--blue-600);}
+.fiche-match__meta{text-align:center;color:var(--gray-500);margin-bottom:8px;}
+.fiche-liens{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px;}
+.fiche-section{margin-top:32px;}
+.fiche-section h2{font-size:1.3rem;margin-bottom:14px;}
+
+/* ---------- Cotes 1-X-2 ---------- */
+.odds-row{display:flex;gap:8px;margin-top:12px;}
+.odds-pill{
+  flex:1;background:var(--gray-50);border:1px solid var(--gray-100);border-radius:var(--radius-s);
+  padding:8px 6px;text-align:center;
+}
+.odds-pill__label{display:block;font-size:0.7rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.04em;}
+.odds-pill__value{display:block;font-family:var(--font-display);font-size:1.1rem;color:var(--gray-700);margin-top:2px;}
+
+/* ---------- Match à la une (hero) ---------- */
+.match-vedette{
+  background:var(--surface);border:1px solid var(--blue-400);border-radius:var(--radius-m);
+  padding:22px;box-shadow:var(--shadow-card-hover);
+}
+.match-vedette__eyebrow{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.1em;
+  font-size:0.75rem;color:var(--blue-400);margin-bottom:14px;
+}
+.match-vedette__live{
+  background:var(--red-600);color:#fff;font-family:var(--font-display);
+  font-size:0.72rem;padding:3px 10px;border-radius:999px;
+  animation:pulse-live 1.6s ease-in-out infinite;
+}
+.match-vedette__teams{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  font-family:var(--font-display);font-size:1.35rem;color:var(--gray-700);
+  text-align:center;flex-wrap:wrap;margin-bottom:8px;
+}
+.match-vedette__teams img{width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;}
+.match-vedette__score{font-size:1.9rem;color:var(--blue-400);}
+.match-vedette__meta{text-align:center;color:var(--gray-500);font-size:0.85rem;margin-bottom:16px;}
+.match-vedette__cta{display:flex;justify-content:center;}
+
+/* ---------- Barre de recherche ---------- */
+.search-bar{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--gray-100);border-radius:999px;
+  padding:12px 18px;max-width:420px;
+}
+.search-bar input{
+  flex:1;border:0;background:transparent;color:var(--gray-700);font-family:inherit;font-size:0.95rem;outline:0;
+}
+.search-bar input::placeholder{color:var(--gray-500);}
+
+.ticket-card__odds{font-size:0.82rem;color:var(--gray-500);margin-top:4px;}
+
+/* Onglets de filtre par sport */
+.sport-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.sport-tab{
+  background:var(--surface);border:1px solid var(--gray-100);color:var(--gray-700);
+  font-family:var(--font-display);font-size:0.95rem;padding:9px 16px;border-radius:999px;
+  transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.sport-tab:hover{border-color:var(--blue-600);}
+.sport-tab.is-active{background:var(--navy-900);border-color:var(--navy-900);color:#fff;}
+
+/* État vide */
+.empty-state{
+  grid-column:1/-1;
+  text-align:center;padding:40px 20px;color:var(--gray-500);
+  background:var(--surface);border:1px dashed var(--gray-100);border-radius:var(--radius-m);
+}
+.empty-state strong{display:block;color:var(--navy-900);font-family:var(--font-display);font-size:1.1rem;margin-bottom:4px;}
+
+.disclaimer{
+  font-size:0.82rem;color:var(--gray-500);
+  background:var(--gray-50);border-left:3px solid var(--blue-600);
+  padding:12px 14px;border-radius:0 var(--radius-s) var(--radius-s) 0;
+  margin:20px 0;
+}
+
+/* ---------- 8. CARTES ARTICLE ---------- */
+.article-card{
+  background:var(--surface);border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:box-shadow .2s ease, transform .2s ease;
+}
+.article-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-2px);}
+.article-card__media{
+  aspect-ratio:16/9;
+  background:linear-gradient(135deg,var(--blue-600),var(--navy-900));
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.85);font-family:var(--font-display);
+  font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;text-align:center;padding:10px;
+}
+.article-card__body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.article-card__date{font-size:0.78rem;color:var(--gray-500);}
+.article-card__title{font-size:1.2rem;margin:0;}
+.article-card__excerpt{color:var(--gray-500);font-size:0.92rem;flex:1;}
+
+/* ---------- 9. STATISTIQUES (accueil) ---------- */
+.stat-box{
+  background:var(--navy-900);color:var(--white);
+  border-radius:var(--radius-m);padding:22px;
+  text-align:center;
+  transition:transform .15s ease, background .15s ease;
+}
+a.stat-box:hover{background:var(--navy-800);transform:translateY(-2px);}
+.stat-box__num{font-family:var(--font-display);font-size:2.4rem;color:var(--blue-400);}
+.stat-box__label{font-size:0.85rem;color:var(--gray-100);opacity:0.8;}
+
+/* ---------- 10. GUIDE / ACCORDÉON ---------- */
+.accordion__item{
+  border-bottom:1px solid var(--gray-100);
+}
+.accordion__trigger{
+  width:100%;text-align:left;background:transparent;border:0;
+  padding:18px 4px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-display);font-size:1.1rem;color:var(--navy-900);gap:16px;
+}
+.accordion__icon{transition:transform .2s ease;flex:none;}
+.accordion__trigger[aria-expanded="true"] .accordion__icon{transform:rotate(45deg);}
+.accordion__panel{
+  max-height:0;overflow:hidden;transition:max-height .25s ease;
+  color:var(--gray-500);font-size:0.95rem;
+}
+.accordion__panel__inner{padding:0 4px 18px;}
+
+/* ---------- 11. FORMULAIRE DE CONTACT ---------- */
+.form-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.form-field label{font-size:0.88rem;font-weight:600;color:var(--navy-900);}
+.form-field input,.form-field textarea{
+  border:1px solid var(--gray-100);border-radius:var(--radius-s);
+  padding:12px 14px;font-family:inherit;font-size:0.95rem;color:var(--gray-700);
+  background:var(--surface);
+}
+.form-field input:focus,.form-field textarea:focus{border-color:var(--blue-600);}
+.form-note{
+  font-size:0.85rem;color:var(--gray-500);background:var(--gray-50);
+  border-radius:var(--radius-s);padding:12px 14px;margin-top:6px;
+}
+.social-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.social-list a{
+  padding:8px 14px;border:1px solid var(--gray-100);border-radius:999px;
+  font-size:0.88rem;color:var(--navy-900);
+}
+.social-list a:hover{border-color:var(--blue-600);color:var(--blue-600);}
+
+/* ---------- 12. EMPLACEMENT AFFILIATION ---------- */
+.affiliate-slot{
+  border:2px dashed var(--gray-100);border-radius:var(--radius-m);
+  padding:20px;text-align:center;color:var(--gray-500);font-size:0.88rem;
+  background:var(--surface);
+}
+
+/* ---------- 13. PIED DE PAGE ---------- */
+.site-footer{
+  background:var(--navy-900);color:var(--gray-100);
+  padding:44px 0 24px;margin-top:40px;
+}
+.footer-grid{
+  display:grid;gap:28px;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  margin-bottom:28px;
+}
+.footer-grid h3{color:var(--white);font-size:1rem;margin-bottom:12px;}
+.footer-grid a{color:var(--gray-100);opacity:0.8;}
+.footer-grid a:hover{opacity:1;color:var(--blue-400);}
+.footer-grid li{margin-bottom:8px;}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.1);padding-top:18px;
+  font-size:0.82rem;color:var(--gray-100);opacity:0.6;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+}
+
+/* ---------- 14. UTILITAIRES RESPONSIVES ---------- */
+@media (min-width:600px){
+  .hero{padding:72px 0 88px;}
+}
+@media (min-width:900px){
+  .hero .container{grid-template-columns:1.2fr 0.8fr;align-items:center;}
+  .section{padding:72px 0;}
+}
+@media (min-width:1200px){
+  .section{padding:88px 0;}
+}
+
+/* ---------- 15. FILTRES (pages Matchs / Scores) ---------- */
+.filters-bar{
+  display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;align-items:center;
+}
+.filter-select{
+  background:var(--surface);border:1px solid var(--gray-100);color:var(--gray-700);
+  font-family:var(--font-body);font-size:0.92rem;padding:9px 12px;border-radius:var(--radius-s);
+  min-width:160px;
+}
+.filter-select:focus{border-color:var(--blue-600);}
+
+/* ---------- 16. CARTE MATCH ---------- */
+.match-card{cursor:pointer;
+  background:var(--surface);border-radius:var(--radius-m);box-shadow:var(--shadow-card);
+  overflow:hidden;transition:box-shadow .2s ease, transform .2s ease;
+}
+.match-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-2px);}
+.match-card__top{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:12px 16px;border-bottom:1px solid var(--gray-100);
+}
+.match-card__body{padding:14px 16px 16px;}
+.match-card__competition{font-size:0.85rem;color:var(--gray-500);margin-bottom:8px;}
+.match-card__teams{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:var(--font-display);font-size:1.25rem;color:var(--navy-900);margin-bottom:6px;
+}
+.match-card__teams .vs{font-size:0.82rem;color:var(--gray-500);}
+.match-card__meta{font-size:0.85rem;color:var(--gray-500);}
+
+/* ---------- 17. CARTE SCORE ---------- */
+.score-card__score{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  font-family:var(--font-display);font-size:2rem;color:var(--navy-900);
+  margin:10px 0 6px;
+}
+.score-card__score .separateur{color:var(--gray-500);font-size:1.2rem;}
+.score-card__mt{text-align:center;font-size:0.8rem;color:var(--gray-500);margin-bottom:8px;}

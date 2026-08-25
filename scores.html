@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scores et résultats | Jomion-Sport</title>
+<meta name="description" content="Retrouvez les scores et résultats des matchs terminés en football, basketball, tennis et plus, filtrables par sport, pays, compétition et date.">
+<link rel="canonical" href="https://votre-nom-utilisateur.github.io/jomion-sport/scores.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jomion-Sport">
+<meta property="og:title" content="Scores et résultats | Jomion-Sport">
+<meta property="og:description" content="Tous les résultats des matchs terminés, tous sports confondus, filtrables par sport, pays, compétition et date.">
+<meta property="og:url" content="https://votre-nom-utilisateur.github.io/jomion-sport/scores.html">
+<meta property="og:locale" content="fr_FR">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<script>(function(){try{if(localStorage.getItem("jomion-theme")==="light"){document.documentElement.setAttribute("data-theme","light");}}catch(e){}})();</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Aller au contenu principal</a>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <!-- Contenu généré automatiquement par renderTicker() dans js/script.js,
+         à partir de la table "competitions" de Supabase (actif = true,
+         triées par ordre_affichage). Liste de secours si indisponible. -->
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand__crest" aria-hidden="true">JS</span>
+      <span class="brand__text">
+        <span class="brand__name">Jomion-Sport</span>
+        <span class="brand__tagline">Analyses · Statistiques · Pronostics</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav">
+      <span class="nav-toggle__bar"></span>
+      <span class="visually-hidden">Ouvrir le menu</span>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+      <ul class="main-nav__list">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="matchs.html">Matchs</a></li>
+        <li><a href="scores.html" aria-current="page">Scores</a></li>
+        <li><a href="classement.html">Classement</a></li>
+        <li><a href="pronostics.html">Pronostics</a></li>
+        <li><a href="analyses.html">Analyses</a></li>
+        <li><a href="actualites.html">Actualités</a></li>
+        <li><a href="competitions.html">Compétitions</a></li>
+        <li><a href="guide.html">Guide</a></li>
+        <li><a href="a-propos.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+              <li class="theme-toggle-item"><button type="button" class="theme-toggle" aria-label="Changer de thème">☀️</button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="nav-backdrop"></div>
+
+<main id="main">
+  <section class="hero" style="padding-bottom:40px;">
+    <div class="container" style="display:block;">
+      <p class="hero__eyebrow">Scores</p>
+      <h1 style="max-width:none;">Scores &amp; résultats</h1>
+      <p class="hero__lead">Les résultats des matchs terminés, tous sports confondus. Filtrez par sport, pays, compétition ou date.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="liste-title">
+    <div class="container">
+      <h2 class="visually-hidden" id="liste-title">Liste des scores</h2>
+
+      <div class="sport-tabs" role="tablist" aria-label="Filtrer les scores par sport">
+        <button class="sport-tab is-active" data-sport-filter="tous" role="tab" aria-selected="true">Tous</button>
+        <button class="sport-tab" data-sport-filter="football" role="tab" aria-selected="false">⚽ Football</button>
+        <button class="sport-tab" data-sport-filter="basketball" role="tab" aria-selected="false">🏀 Basketball</button>
+        <button class="sport-tab" data-sport-filter="tennis" role="tab" aria-selected="false">🎾 Tennis</button>
+      </div>
+
+      <div class="filters-bar">
+        <select class="filter-select" id="filtre-pays" aria-label="Filtrer par pays"></select>
+        <select class="filter-select" id="filtre-competition" aria-label="Filtrer par compétition"></select>
+        <select class="filter-select" id="filtre-date" aria-label="Filtrer par date"></select>
+      </div>
+
+      <div class="grid grid--3" id="scores-liste">
+        <div class="empty-state" style="grid-column:1/-1;">Chargement…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <!-- EMPLACEMENT AFFILIATION — page scores -->
+      <div class="affiliate-slot">Emplacement réservé à un futur partenaire (lien d'affiliation à ajouter ici)</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Jomion-Sport</h3>
+        <p style="opacity:0.75;font-size:0.9rem;">Média indépendant d'analyses, de statistiques et de pronostics sportifs.</p>
+      </div>
+      <div>
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="matchs.html">Matchs</a></li>
+          <li><a href="scores.html">Scores</a></li>
+          <li><a href="classement.html">Classement</a></li>
+          <li><a href="pronostics.html">Pronostics</a></li>
+          <li><a href="analyses.html">Analyses</a></li>
+          <li><a href="actualites.html">Actualités</a></li>
+          <li><a href="competitions.html">Compétitions</a></li>
+          <li><a href="guide.html">Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Site</h3>
+        <ul>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Jomion-Sport. Site indépendant, non affilié à un bookmaker.</span>
+      <span>Jouer comporte des risques : jouez de manière responsable.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Bibliothèque officielle Supabase (chargée depuis un CDN, gratuite) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
